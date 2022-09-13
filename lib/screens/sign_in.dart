@@ -1,14 +1,16 @@
 import 'dart:convert';
 
+import 'package:ecommerce/common/const.dart';
+import 'package:ecommerce/screens/homepage.dart';
 import 'package:ecommerce/screens/sign_up.dart';
 import 'package:ecommerce/service/api_service.dart';
 import 'package:ecommerce/widget/bazier_container.dart';
 import 'package:flutter/material.dart';
+import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
-  LoginPage({Key? key, this.title}) : super(key: key);
-
-  final String? title;
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -18,13 +20,50 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  bool isLoading = false;
+
+  @override
+  void initState() {
+    isLoggedIn();
+    super.initState();
+  }
+
+  Future isLoggedIn() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    var token = sharedPreferences.getString("token");
+
+    if (token != null) {
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => HomePage()));
+    }
+  }
+
   login() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    setState(() {
+      isLoading = true;
+    });
     var data = await CustomHttp()
         .loginUser(emailController.text, passwordController.text);
 
+    setState(() {
+      isLoading = false;
+    });
+
     var response = jsonDecode(data);
 
-    print("Response: ${response}");
+    sharedPreferences.setString("token", response['access_token']);
+
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: ((context) => HomePage(
+                  token: sharedPreferences.getString("token"),
+                ))));
+
+    print("TokenResponse: ${sharedPreferences.get("token")}");
   }
 
   Widget _entryField(String title, TextEditingController controller,
@@ -232,43 +271,47 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
-        body: Container(
-      height: height,
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-              top: -height * .15,
-              right: -MediaQuery.of(context).size.width * .4,
-              child: BezierContainer()),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: height * .2),
-                  _title(),
-                  SizedBox(height: 50),
-                  _emailPasswordWidget(),
-                  SizedBox(height: 20),
-                  _submitButton(),
-                  Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    alignment: Alignment.centerRight,
-                    child: Text('Forgot Password ?',
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w500)),
-                  ),
-                  _divider(),
-                  _facebookButton(),
-                  SizedBox(height: height * .055),
-                  _createAccountLabel(),
-                ],
+        body: ModalProgressHUD(
+      inAsyncCall: isLoading,
+      progressIndicator: CircularProgressIndicator(),
+      child: SizedBox(
+        height: height,
+        child: Stack(
+          children: [
+            Positioned(
+                top: -height * .15,
+                right: -MediaQuery.of(context).size.width * .4,
+                child: BezierContainer()),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: height * .2),
+                    _title(),
+                    SizedBox(height: 50),
+                    _emailPasswordWidget(),
+                    SizedBox(height: 20),
+                    _submitButton(),
+                    Container(
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      alignment: Alignment.centerRight,
+                      child: Text('Forgot Password ?',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500)),
+                    ),
+                    _divider(),
+                    _facebookButton(),
+                    SizedBox(height: height * .055),
+                    _createAccountLabel(),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     ));
   }

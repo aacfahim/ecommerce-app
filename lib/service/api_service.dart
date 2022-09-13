@@ -1,6 +1,5 @@
+import 'package:ecommerce/common/const.dart';
 import "package:http/http.dart" as http;
-
-String baseURL = "https://apihomechef.antopolis.xyz/";
 
 class CustomHttp {
   static const Map<String, String> defaultHeader = {
@@ -16,11 +15,13 @@ class CustomHttp {
     var response =
         await http.post(Uri.parse(link), body: map, headers: defaultHeader);
 
-    print(" ${response.body}");
+    // print("${response.body}");
 
     if (response.statusCode == 200) {
+      showToast('Login Successful');
       return response.body;
     } else {
+      showToast('Something went wrong');
       return "Failed";
     }
   }
