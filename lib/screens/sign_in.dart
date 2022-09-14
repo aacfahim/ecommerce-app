@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:ecommerce/common/const.dart';
 import 'package:ecommerce/screens/homepage.dart';
 import 'package:ecommerce/screens/sign_up.dart';
 import 'package:ecommerce/service/api_service.dart';
@@ -22,23 +20,6 @@ class _LoginPageState extends State<LoginPage> {
 
   bool isLoading = false;
 
-  @override
-  void initState() {
-    isLoggedIn();
-    super.initState();
-  }
-
-  Future isLoggedIn() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-    var token = sharedPreferences.getString("token");
-
-    if (token != null) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
-    }
-  }
-
   login() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
@@ -57,11 +38,7 @@ class _LoginPageState extends State<LoginPage> {
     sharedPreferences.setString("token", response['access_token']);
 
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: ((context) => HomePage(
-                  token: sharedPreferences.getString("token"),
-                ))));
+        context, MaterialPageRoute(builder: ((context) => HomePage())));
 
     print("TokenResponse: ${sharedPreferences.get("token")}");
   }

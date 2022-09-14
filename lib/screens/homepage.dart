@@ -5,8 +5,7 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({super.key, token});
-  String? token;
+  HomePage({super.key});
 
   @override
   State<HomePage> createState() => _HomePageState();
