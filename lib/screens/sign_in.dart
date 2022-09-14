@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:ecommerce/screens/homepage.dart';
+import 'package:ecommerce/screens/bottom_nav_page.dart';
 import 'package:ecommerce/screens/sign_up.dart';
 import 'package:ecommerce/service/api_service.dart';
 import 'package:ecommerce/widget/bazier_container.dart';
