@@ -7,5 +7,6 @@ class OrderProvider with ChangeNotifier {
 
   Future getOrderData() async {
     orderList = await CustomHttp().fetchOrderData();
+    notifyListeners();
   }
 }
