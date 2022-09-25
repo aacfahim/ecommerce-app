@@ -25,9 +25,14 @@ class _OrderPageState extends State<OrderPage> {
   //with providers, can be used with stateless widget
 
   @override
+  void initState() {
+    Provider.of<OrderProvider>(context, listen: false).getOrderData();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // using provider
-    var orderProvider = Provider.of<OrderProvider>(context).getOrderData();
     var orderList = Provider.of<OrderProvider>(context).orderList;
 
     return Scaffold(

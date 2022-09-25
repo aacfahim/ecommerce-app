@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:ecommerce/common/const.dart';
+import 'package:ecommerce/model/category_model.dart';
 import 'package:ecommerce/model/order_model.dart';
 import "package:http/http.dart" as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,6 +67,34 @@ class CustomHttp {
     } catch (e) {
       print(e);
       return orderList;
+    }
+  }
+
+  Future<List<CategoryModel>> fetchCategoryData() async {
+    List<CategoryModel> categoryList = [];
+    CategoryModel categoryModel;
+
+    var link = "${baseURL}api/admin/category";
+
+    var response =
+        await http.get(Uri.parse(link), headers: await getHeaderWithToken());
+
+    try {
+      var data = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        for (var i in data) {
+          categoryModel = CategoryModel.fromJson(i);
+          categoryList.add(categoryModel);
+        }
+        return categoryList;
+      } else {
+        showToast("${response.statusCode} Something went wrong");
+        return categoryList;
+      }
+    } catch (e) {
+      print(e);
+      return categoryList;
     }
   }
 }

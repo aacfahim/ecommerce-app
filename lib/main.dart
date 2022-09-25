@@ -1,3 +1,4 @@
+import 'package:ecommerce/providers/category_provider.dart';
 import 'package:ecommerce/providers/order_provider.dart';
 import 'package:ecommerce/screens/bottom_nav_page.dart';
 import 'package:ecommerce/screens/sign_in.dart';
@@ -24,6 +25,7 @@ class _MyAppState extends State<MyApp> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: ((context) => OrderProvider())),
+        ChangeNotifierProvider(create: ((context) => CategoryProvider())),
       ],
       child: MaterialApp(
         home: const SplashScreen(),
