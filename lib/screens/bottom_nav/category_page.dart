@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:blur/blur.dart';
 import 'package:ecommerce/providers/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -29,13 +32,59 @@ class _CategoryPageState extends State<CategoryPage> {
                 itemBuilder: (context, index) {
                   return Column(
                     children: [
-                      CircleAvatar(
-                        radius: 50,
-                        backgroundImage: NetworkImage(
-                          "https://apihomechef.antopolis.xyz/images/${categoryList[index].image ?? ""}",
-                        ),
+                      SizedBox(
+                        height: 150,
+                        width: double.infinity,
+                        child: Card(
+                            semanticContainer: true,
+                            margin: EdgeInsets.all(10),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25.0),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        "https://apihomechef.antopolis.xyz/images/${categoryList[index].image ?? ""}"),
+                                  )),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "${categoryList[index].name}",
+                                  style: const TextStyle(
+                                      color: Colors.white,
+                                      shadows: [
+                                        Shadow(
+                                            // bottomLeft
+                                            offset: Offset(-1.5, -1.5),
+                                            color: Colors.black),
+                                        Shadow(
+                                            // bottomRight
+                                            offset: Offset(1.5, -1.5),
+                                            color: Colors.black),
+                                        Shadow(
+                                            // topRight
+                                            offset: Offset(1.5, 1.5),
+                                            color: Colors.black),
+                                        Shadow(
+                                            // topLeft
+                                            offset: Offset(-1.5, 1.5),
+                                            color: Colors.black),
+                                      ],
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ),
+                            )),
                       ),
-                      Text("${categoryList[index].name}")
+                      Row(
+                        children: [
+                          TextButton(onPressed: () {}, child: Text("Edit")),
+                          TextButton(onPressed: () {}, child: Text("Delete")),
+                        ],
+                      )
                     ],
                   );
                 },
