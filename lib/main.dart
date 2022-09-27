@@ -1,5 +1,6 @@
 import 'package:ecommerce/providers/category_provider.dart';
 import 'package:ecommerce/providers/order_provider.dart';
+import 'package:ecommerce/screens/add_category.dart';
 import 'package:ecommerce/screens/bottom_nav_page.dart';
 import 'package:ecommerce/screens/sign_in.dart';
 import 'package:ecommerce/screens/splash_screen.dart';
@@ -28,6 +29,9 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: ((context) => CategoryProvider())),
       ],
       child: MaterialApp(
+        theme: ThemeData(
+          primarySwatch: Colors.deepOrange,
+        ),
         home: const SplashScreen(),
       ),
     );

@@ -1,7 +1,5 @@
-import 'dart:ui';
-
-import 'package:blur/blur.dart';
 import 'package:ecommerce/providers/category_provider.dart';
+import 'package:ecommerce/screens/add_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -25,6 +23,13 @@ class _CategoryPageState extends State<CategoryPage> {
   Widget build(BuildContext context) {
     var categoryList = Provider.of<CategoryProvider>(context).categoryList;
     return Scaffold(
+        floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => AddCategory()));
+            },
+            child: Icon(Icons.add),
+            backgroundColor: Colors.deepOrange),
         body: categoryList.isEmpty
             ? Center(child: CircularProgressIndicator())
             : ListView.builder(
