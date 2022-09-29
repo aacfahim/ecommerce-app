@@ -100,7 +100,7 @@ class CustomHttp {
     }
   }
 
-  createCategory(var name, dynamic icon, dynamic image) async {
+  Future createCategory(var name, dynamic icon, dynamic image) async {
     var link = Uri.parse("${baseURL}api/admin/category/store");
 
     var request = http.MultipartRequest("POST", link);
