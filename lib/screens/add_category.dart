@@ -1,3 +1,5 @@
+import 'package:ecommerce/common/const.dart';
+import 'package:ecommerce/service/api_service.dart';
 import 'package:flutter/material.dart';
 import "dart:io";
 import 'package:flutter/src/widgets/container.dart';
@@ -16,6 +18,7 @@ class _AddCategoryState extends State<AddCategory> {
   bool isVisible = false;
   File? icon, image;
   final ImagePicker _picker = ImagePicker();
+  final _formKey = GlobalKey<FormState>();
 
   Future getIconFromGallery() async {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
@@ -36,7 +39,7 @@ class _AddCategoryState extends State<AddCategory> {
     final pickedImage = await _picker.pickImage(source: ImageSource.gallery);
     setState(() {
       if (pickedImage != null) {
-        icon = File(pickedImage.path);
+        image = File(pickedImage.path);
         print("Image Found");
         setState(() {
           isVisible = true;
@@ -58,64 +61,103 @@ class _AddCategoryState extends State<AddCategory> {
             children: [
               Expanded(
                 flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    getIconFromGallery();
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    child: Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.orange.withOpacity(0.15),
+                child: icon == null
+                    ? InkWell(
+                        onTap: () {
+                          getIconFromGallery();
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0)),
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              color: Colors.orange.withOpacity(0.15),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Icon(Icons.image), Text("Add Icon")],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                            color: Colors.orange.withOpacity(0.15),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: FileImage(icon!),
+                            )),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Icon(Icons.image), Text("Add Icon")],
-                      ),
-                    ),
-                  ),
-                ),
               ),
               Expanded(
                 flex: 1,
-                child: InkWell(
-                  onTap: () {
-                    getImageFromGallery();
-                  },
-                  child: Card(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    child: Container(
-                      height: 200,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12.0),
-                        color: Colors.orange.withOpacity(0.15),
+                child: image == null
+                    ? InkWell(
+                        onTap: () {
+                          getImageFromGallery();
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12.0)),
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              color: Colors.orange.withOpacity(0.15),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Icon(Icons.image), Text("Add Image")],
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 200,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(12.0),
+                            color: Colors.orange.withOpacity(0.15),
+                            image: DecorationImage(
+                              image: FileImage(image!),
+                              fit: BoxFit.cover,
+                            )),
                       ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [Icon(Icons.image), Text("Add Image")],
-                      ),
-                    ),
-                  ),
-                ),
               )
             ],
           ),
           SizedBox(height: 10),
-          TextFormField(
-            controller: categoryName,
-            decoration: InputDecoration(
-              label: Text("Enter Category Name"),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12.0),
+          Form(
+            key: _formKey,
+            child: TextFormField(
+              controller: categoryName,
+              validator: ((value) {
+                if (value == null || value.isEmpty) {
+                  return showToast("Please enter the category name");
+                }
+              }),
+              decoration: InputDecoration(
+                label: Text("Enter Category Name"),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
               ),
             ),
           ),
           SizedBox(height: 10),
-          Center(child: ElevatedButton(onPressed: () {}, child: Text("Save")))
+          Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // register new category
+                      CustomHttp()
+                          .createCategory(categoryName.text, icon!, image!);
+                    }
+                  },
+                  child: Text("Save")))
         ]),
       ),
     );

@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:ecommerce/common/const.dart';
 import 'package:ecommerce/model/category_model.dart';
 import 'package:ecommerce/model/order_model.dart';
+import 'package:flutter/cupertino.dart';
 import "package:http/http.dart" as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -95,6 +97,30 @@ class CustomHttp {
     } catch (e) {
       print(e);
       return categoryList;
+    }
+  }
+
+  createCategory(var name, dynamic icon, dynamic image) async {
+    var link = Uri.parse("${baseURL}api/admin/category/store");
+
+    var request = http.MultipartRequest("POST", link);
+    request.headers.addAll(await getHeaderWithToken());
+
+    request.fields["name"] = name.toString(); // for sending text only
+
+    // for sending media files
+    icon = await http.MultipartFile.fromPath("icon", icon!.path);
+    image = await http.MultipartFile.fromPath("image", image!.path);
+
+    request.files.add(icon);
+    request.files.add(image);
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      showToast("Operation completed");
+    } else {
+      showToast("Failed");
     }
   }
 }
