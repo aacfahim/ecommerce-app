@@ -118,9 +118,43 @@ class CustomHttp {
     request.files.add(image);
 
     var response = await request.send();
+    print("response code: ${response.statusCode}");
 
-    if (response.statusCode == 201) {
+    if (response.statusCode == 200) {
       showToast("Operation completed");
+      Navigator.of(context).pop();
+    } else {
+      showToast("Failed");
+    }
+  }
+
+  Future updateCategory(var name, dynamic icon, dynamic image, dynamic id,
+      BuildContext context) async {
+    var link = Uri.parse("${baseURL}api/admin/category/$id/update");
+
+    var request = http.MultipartRequest("POST", link);
+    request.headers.addAll(await getHeaderWithToken());
+
+    request.fields["name"] = name.toString(); // for sending text only
+
+    // for sending media files
+
+    if (icon != null) {
+      icon = await http.MultipartFile.fromPath("icon", icon!.path);
+      request.files.add(icon);
+    }
+
+    if (image != null) {
+      image = await http.MultipartFile.fromPath("image", image!.path);
+      request.files.add(image);
+    }
+
+    var response = await request.send();
+
+    print("response code: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      showToast("Category Updated");
       Navigator.of(context).pop();
     } else {
       showToast("Failed");
