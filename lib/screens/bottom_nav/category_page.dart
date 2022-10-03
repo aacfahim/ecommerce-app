@@ -104,7 +104,10 @@ class _CategoryPageState extends State<CategoryPage> {
                                         builder: ((context) => EditCategory(
                                               categoryModel:
                                                   categoryList[index],
-                                            ))));
+                                            )))).then((value) =>
+                                    Provider.of<CategoryProvider>(context,
+                                            listen: false)
+                                        .getCategoryData());
                               },
                               child: Text("Edit")),
                           TextButton(onPressed: () {}, child: Text("Delete")),
