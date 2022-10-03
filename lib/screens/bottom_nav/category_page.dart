@@ -1,5 +1,6 @@
 import 'package:ecommerce/providers/category_provider.dart';
 import 'package:ecommerce/screens/add_category.dart';
+import 'package:ecommerce/screens/edit_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -34,7 +35,7 @@ class _CategoryPageState extends State<CategoryPage> {
             child: Icon(Icons.add),
             backgroundColor: Colors.deepOrange),
         body: categoryList.isEmpty
-            ? Center(child: CircularProgressIndicator())
+            ? const Center(child: CircularProgressIndicator())
             : ListView.builder(
                 itemCount: categoryList.length,
                 itemBuilder: (context, index) {
@@ -59,37 +60,53 @@ class _CategoryPageState extends State<CategoryPage> {
                                   )),
                               child: Align(
                                 alignment: Alignment.center,
-                                child: Text(
-                                  "${categoryList[index].name}",
-                                  style: const TextStyle(
-                                      color: Colors.white,
-                                      shadows: [
-                                        Shadow(
-                                            // bottomLeft
-                                            offset: Offset(-1.5, -1.5),
-                                            color: Colors.black),
-                                        Shadow(
-                                            // bottomRight
-                                            offset: Offset(1.5, -1.5),
-                                            color: Colors.black),
-                                        Shadow(
-                                            // topRight
-                                            offset: Offset(1.5, 1.5),
-                                            color: Colors.black),
-                                        Shadow(
-                                            // topLeft
-                                            offset: Offset(-1.5, 1.5),
-                                            color: Colors.black),
-                                      ],
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold),
+                                child: ListTile(
+                                  leading: CircleAvatar(
+                                    backgroundImage: NetworkImage(
+                                        "https://apihomechef.antopolis.xyz/images/${categoryList[index].icon ?? ""}"),
+                                  ),
+                                  title: Text(
+                                    "${categoryList[index].name}",
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                              // bottomLeft
+                                              offset: Offset(-1.5, -1.5),
+                                              color: Colors.black),
+                                          Shadow(
+                                              // bottomRight
+                                              offset: Offset(1.5, -1.5),
+                                              color: Colors.black),
+                                          Shadow(
+                                              // topRight
+                                              offset: Offset(1.5, 1.5),
+                                              color: Colors.black),
+                                          Shadow(
+                                              // topLeft
+                                              offset: Offset(-1.5, 1.5),
+                                              color: Colors.black),
+                                        ],
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.bold),
+                                  ),
                                 ),
                               ),
                             )),
                       ),
                       Row(
                         children: [
-                          TextButton(onPressed: () {}, child: Text("Edit")),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: ((context) => EditCategory(
+                                              categoryModel:
+                                                  categoryList[index],
+                                            ))));
+                              },
+                              child: Text("Edit")),
                           TextButton(onPressed: () {}, child: Text("Delete")),
                         ],
                       )
