@@ -57,7 +57,7 @@ class _AddCategoryState extends State<AddCategory> {
     return ModalProgressHUD(
       inAsyncCall: onProgress,
       progressIndicator: spinkit,
-      blur: 0.1,
+      blur: 0.3,
       child: Scaffold(
         appBar: AppBar(title: Text("Add new Category")),
         body: Padding(
@@ -168,6 +168,7 @@ class _AddCategoryState extends State<AddCategory> {
                         } else if (image == null) {
                           showToast("Please upload category image");
                         } else {
+                          /* Loading screen doesnt appear while adding cat */
                           setState(() {
                             onProgress = true;
                           });
