@@ -89,7 +89,8 @@ class CustomHttp {
           categoryModel = CategoryModel.fromJson(i);
           categoryList.add(categoryModel);
         }
-        return categoryList;
+
+        return List.from(categoryList.reversed);
       } else {
         showToast("${response.statusCode} Something went wrong");
         return categoryList;

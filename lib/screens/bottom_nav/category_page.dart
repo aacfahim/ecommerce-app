@@ -26,7 +26,10 @@ class _CategoryPageState extends State<CategoryPage> {
         floatingActionButton: FloatingActionButton(
             onPressed: () {
               Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => AddCategory()));
+                      MaterialPageRoute(builder: (context) => AddCategory()))
+                  .then((value) =>
+                      Provider.of<CategoryProvider>(context, listen: false)
+                          .getCategoryData());
             },
             child: Icon(Icons.add),
             backgroundColor: Colors.deepOrange),
