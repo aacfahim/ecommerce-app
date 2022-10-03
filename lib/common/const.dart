@@ -4,6 +4,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 String baseURL = "https://apihomechef.antopolis.xyz/";
 
+String imageURL = "https://apihomechef.antopolis.xyz/images/";
+
 showToast(String message) {
   return Fluttertoast.showToast(
       msg: message,
@@ -15,6 +17,6 @@ showToast(String message) {
 }
 
 const spinkit = SpinKitPouringHourGlass(
-  color: Colors.white,
+  color: Colors.orange,
   size: 50.0,
 );
