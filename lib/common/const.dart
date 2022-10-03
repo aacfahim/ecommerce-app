@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 String baseURL = "https://apihomechef.antopolis.xyz/";
@@ -12,3 +13,8 @@ showToast(String message) {
       textColor: Colors.white,
       fontSize: 16.0);
 }
+
+const spinkit = SpinKitPouringHourGlass(
+  color: Colors.white,
+  size: 50.0,
+);

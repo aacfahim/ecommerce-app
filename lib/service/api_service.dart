@@ -100,7 +100,8 @@ class CustomHttp {
     }
   }
 
-  Future createCategory(var name, dynamic icon, dynamic image) async {
+  Future createCategory(
+      var name, dynamic icon, dynamic image, BuildContext context) async {
     var link = Uri.parse("${baseURL}api/admin/category/store");
 
     var request = http.MultipartRequest("POST", link);
@@ -117,8 +118,9 @@ class CustomHttp {
 
     var response = await request.send();
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 201) {
       showToast("Operation completed");
+      Navigator.of(context).pop();
     } else {
       showToast("Failed");
     }
