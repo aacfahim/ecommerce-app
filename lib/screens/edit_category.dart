@@ -27,6 +27,7 @@ class _EditCategoryState extends State<EditCategory> {
   bool isVisible = false;
   bool onProgress = false;
   File? icon, image;
+
   final ImagePicker _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
 
@@ -166,24 +167,18 @@ class _EditCategoryState extends State<EditCategory> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        if (icon == null) {
-                          showToast("Please upload a category icon");
-                        } else if (image == null) {
-                          showToast("Please upload category image");
-                        } else {
-                          /* Loading screen doesnt appear while adding cat */
-                          setState(() {
-                            onProgress = true;
-                          });
-                          CustomHttp().updateCategory(categoryName.text, icon!,
-                              image!, widget.categoryModel!.id, context);
-                          setState(() {
-                            onProgress = false;
-                          });
-                        }
+                        /* Loading screen doesnt appear while adding cat */
+                        setState(() {
+                          onProgress = true;
+                        });
+                        CustomHttp().updateCategory(categoryName.text, icon,
+                            image, widget.categoryModel!.id, context);
+                        setState(() {
+                          onProgress = false;
+                        });
                       }
                     },
-                    child: Text("Save")))
+                    child: Text("Update Category")))
           ]),
         ),
       ),

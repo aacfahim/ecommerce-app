@@ -120,7 +120,7 @@ class CustomHttp {
     var response = await request.send();
     print("response code: ${response.statusCode}");
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       showToast("Operation completed");
       Navigator.of(context).pop();
     } else {
@@ -140,16 +140,22 @@ class CustomHttp {
     // for sending media files
 
     if (icon != null) {
-      icon = await http.MultipartFile.fromPath("icon", icon!.path);
-      request.files.add(icon);
+      var iconFile = await http.MultipartFile.fromPath("icon", icon.path);
+      request.files.add(iconFile);
     }
 
     if (image != null) {
-      image = await http.MultipartFile.fromPath("image", image!.path);
-      request.files.add(image);
+      var imageFile = await http.MultipartFile.fromPath("image", image.path);
+      request.files.add(imageFile);
     }
 
     var response = await request.send();
+    // Fetching the response data in byte format from the server and parsing to string
+    var responseData = await response.stream.toBytes();
+    var responseString = String.fromCharCodes(responseData);
+
+    var data = jsonDecode(responseString);
+    print("byte data: $data");
 
     print("response code: ${response.statusCode}");
 
