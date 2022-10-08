@@ -1,6 +1,7 @@
 import 'package:ecommerce/providers/category_provider.dart';
 import 'package:ecommerce/screens/add_category.dart';
 import 'package:ecommerce/screens/edit_category.dart';
+import 'package:ecommerce/service/api_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -110,7 +111,38 @@ class _CategoryPageState extends State<CategoryPage> {
                                         .getCategoryData());
                               },
                               child: Text("Edit")),
-                          TextButton(onPressed: () {}, child: Text("Delete")),
+                          TextButton(
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title:
+                                          Text("Are you sure want to delete?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, 'Cancel'),
+                                          child: const Text('Cancel'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            CustomHttp().deleteCategory(
+                                                categoryList[index].id);
+                                            Navigator.pop(context, 'OK');
+                                            Provider.of<CategoryProvider>(
+                                                    context,
+                                                    listen: false)
+                                                .getCategoryData();
+                                          },
+                                          child: const Text('OK'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              child: Text("Delete")),
                         ],
                       )
                     ],

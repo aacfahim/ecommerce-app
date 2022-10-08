@@ -166,4 +166,19 @@ class CustomHttp {
       showToast("Failed");
     }
   }
+
+  Future deleteCategory(dynamic id) async {
+    var link = Uri.parse("${baseURL}api/admin/category/$id/delete");
+    var response = await http.delete(link, headers: await getHeaderWithToken());
+
+    var data = jsonDecode(response.body);
+
+    print("Status Code: ${response.statusCode}");
+
+    if (response.statusCode == 200) {
+      showToast("Category Deleted");
+    } else {
+      showToast("Failed");
+    }
+  }
 }
